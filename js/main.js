@@ -212,8 +212,14 @@ initSavingsTabs();
    את הקלאס "active" מה-slide הנכון.
    ה-CSS מטפל בfade-in עם keyframe animation.
 */
+/* טיימר גלובלי — כדי שקריאה חוזרת ל-initCarousel לא תיצור שני טיימרים במקביל */
+let _carouselTimer = null;
+
 /* עוטפים ב-function כדי שנוכל להפעיל מחדש אחרי שה-content-loader בונה את הקרוסלה */
 function initCarousel() {
+    /* מנקים טיימר קודם לפני הכל — מונע כפל כשהפונקציה נקראת פעמיים */
+    clearInterval(_carouselTimer);
+
     const track    = document.getElementById('testimonialsTrack');
     const dotsWrap = document.getElementById('carouselDots');
     const prevBtn  = document.querySelector('.carousel-prev');
@@ -225,7 +231,6 @@ function initCarousel() {
     const allDots = dotsWrap ? dotsWrap.querySelectorAll('.carousel-dot') : [];
     const total   = slides.length;
     let current   = 0;
-    let autoTimer = null;
 
     function goTo(idx) {
         if (idx < 0)       idx = total - 1;
@@ -237,8 +242,9 @@ function initCarousel() {
         allDots[current]?.classList.add('active');
     }
 
-    function play()  { autoTimer = setInterval(() => goTo(current + 1), 5000); }
-    function pause() { clearInterval(autoTimer); }
+    /* 10 שניות — פי שתיים מהמקור. גלובלי כדי שלא יירצו שני טיימרים */
+    function play()  { clearInterval(_carouselTimer); _carouselTimer = setInterval(() => goTo(current + 1), 10000); }
+    function pause() { clearInterval(_carouselTimer); }
 
     /* מנקים אירועים ישנים לפני הוספת חדשים (למניעת כפילויות) */
     const newPrev = prevBtn.cloneNode(true);
@@ -253,10 +259,6 @@ function initCarousel() {
     dotsWrap?.querySelectorAll('.carousel-dot').forEach((d, i) => {
         d.addEventListener('click', () => { pause(); goTo(i); play(); });
     });
-
-    const vp = track.closest('.carousel-viewport');
-    vp?.addEventListener('mouseenter', pause);
-    vp?.addEventListener('mouseleave', play);
 
     /* swipe על מובייל */
     let touchX = 0;
