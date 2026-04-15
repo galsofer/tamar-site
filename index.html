@@ -401,11 +401,11 @@
                     </div>
                 </div>
                 <form class="contact-form reveal" onsubmit="handleSubmit(event)">
-                    <input type="text" placeholder="שם מלא *" required>
-                    <input type="tel" placeholder="טלפון *" required>
-                    <input type="email" placeholder="אימייל">
-                    <input type="text" placeholder="שם העסק">
-                    <textarea placeholder="ספרו לי קצת על העסק שלכם — מה אתם עושים, מה מאתגר אתכם כרגע..." rows="5"></textarea>
+                    <input type="text"  name="from_name"   placeholder="שם מלא *" required>
+                    <input type="tel"   name="phone"        placeholder="טלפון *" required>
+                    <input type="email" name="from_email"   placeholder="אימייל">
+                    <input type="text"  name="business"     placeholder="שם העסק">
+                    <textarea           name="message"      placeholder="ספרו לי קצת על העסק שלכם — מה אתם עושים, מה מאתגר אתכם כרגע..." rows="5"></textarea>
                     <button type="submit">שליחת הפנייה ←</button>
                 </form>
             </div>
@@ -425,6 +425,10 @@
     </a>
 
     <!-- ===== JavaScript ===== -->
+    <!-- EmailJS — שירות שליחת המיילים מהטופס -->
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script>emailjs.init('uuEyfX3_sd0sppl5h');</script>
+
     <!-- content-loader חייב להיטען לפני main.js -->
     <script src="js/content-loader.js" defer></script>
     <script src="js/main.js" defer></script>

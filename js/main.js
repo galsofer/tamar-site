@@ -249,32 +249,56 @@ initCarousel();
 
 /* ---------- טיפול בטופס יצירת קשר ----------
 
-   כרגע הטופס לא שולח אימייל אמיתי — זה ידרוש שרת.
-   בינתיים, כשלוחצים על "שלח", מציגים הודעת הצלחה.
-   בשלב מאוחר יותר נחבר את זה לשירות אמיתי.
+   עכשיו הטופס שולח מייל אמיתי לתמר דרך EmailJS!
+
+   איך זה עובד:
+   1. המשתמש ממלא את הטופס ולוחץ "שלח"
+   2. emailjs.sendForm() לוקח את כל שדות הטופס (לפי name attribute)
+      ושולח אותם לתבנית שהגדרנו ב-EmailJS
+   3. EmailJS שולח מייל לתמר עם כל הפרטים
+   4. אנחנו מציגים הודעת הצלחה או שגיאה בהתאם
 */
 
 function handleSubmit(event) {
-    event.preventDefault();   // מונע ריענון הדף (התנהגות ברירת מחדל של טופס)
+    event.preventDefault();
 
-    const button = event.target.querySelector('button');
+    const form   = event.target;
+    const button = form.querySelector('button');
     const originalText = button.textContent;
 
-    // שינוי הכפתור למצב "שולח..."
+    /* מצב "שולח..." — מונע לחיצה כפולה */
     button.textContent = '...שולח';
     button.disabled = true;
 
-    // סימולציה של שליחה (setTimeout = המתן X מילישניות)
-    setTimeout(() => {
-        button.textContent = '✓ הפנייה נשלחה בהצלחה!';
-        button.style.backgroundColor = '#4caf50';
-        event.target.reset();   // מנקה את שדות הטופס
+    /* שליחה דרך EmailJS
+       service_7oevh9s  = השירות שחיברנו ל-Gmail של תמר
+       template_xmuzdbu = תבנית המייל שעיצבנו
+       form             = הטופס עצמו — EmailJS לוקח ממנו את כל השדות */
+    emailjs.sendForm('service_7oevh9s', 'template_xmuzdbu', form)
 
-        // חוזר לרגיל אחרי 4 שניות
-        setTimeout(() => {
-            button.textContent = originalText;
-            button.style.backgroundColor = '';
+        .then(() => {
+            /* הצלחה — המייל נשלח */
+            button.textContent = '✓ הפנייה נשלחה בהצלחה!';
+            button.style.backgroundColor = '#4caf50';
+            form.reset();
+
+            setTimeout(() => {
+                button.textContent = originalText;
+                button.style.backgroundColor = '';
+                button.disabled = false;
+            }, 4000);
+        })
+
+        .catch((error) => {
+            /* שגיאה — מציגים הודעה ומאפשרים לנסות שוב */
+            console.error('שגיאת EmailJS:', error);
+            button.textContent = '✗ שגיאה — אנא נסו שוב';
+            button.style.backgroundColor = '#e53935';
             button.disabled = false;
-        }, 4000);
-    }, 1200);
+
+            setTimeout(() => {
+                button.textContent = originalText;
+                button.style.backgroundColor = '';
+            }, 4000);
+        });
 }
