@@ -28,6 +28,7 @@
         const content = await response.json();
 
         /* מפעילים את כל הפונקציות שמעדכנות את האתר */
+        applyDesign(content.design);
         applyHero(content.hero);
         applyPainPoints(content.pain_points);
         applyAbout(content.about);
@@ -75,6 +76,60 @@ function setHTML(selector, html) {
 /* ===================================================
    פונקציות לכל סקשן
    =================================================== */
+
+/* ----- עיצוב: גופן, גודל, צבעים ----- */
+function applyDesign(design) {
+    if (!design) return;
+
+    /* --- גופן ---
+       CSS variables הם כמו "מתגים מרכזיים" ב-CSS.
+       כשמשנים את הערך ב-:root, זה משפיע על כל האתר בבת אחת. */
+    if (design.font) {
+        /* טוענים את הגופן מ-Google Fonts אם הוא לא Assistant (שכבר נטען ב-HTML) */
+        if (design.font !== 'Assistant') {
+            const fontUrl = `https://fonts.googleapis.com/css2?family=${design.font.replace(/ /g, '+')}:wght@300;400;500;600;700;800&display=swap`;
+            const link = document.createElement('link');
+            link.rel  = 'stylesheet';
+            link.href = fontUrl;
+            document.head.appendChild(link);
+        }
+        /* מגדירים את הגופן על כל האתר */
+        document.body.style.fontFamily = `'${design.font}', 'Segoe UI', Arial, sans-serif`;
+    }
+
+    /* --- גודל טקסט ---
+       font-size על ה-body קובע את הגודל הבסיסי שממנו כל שאר הגדלים יחסיים */
+    if (design.text_size) {
+        const sizes = { small: '14px', medium: '16px', large: '18px' };
+        document.body.style.fontSize = sizes[design.text_size] || '16px';
+    }
+
+    /* --- צבעים ---
+       style.setProperty משנה CSS variable — כמו לשנות ערך במשתנה גלובלי.
+       כל המקומות באתר שמשתמשים ב-var(--warm-brown) יקבלו את הצבע החדש מיד. */
+    if (design.primary_color) {
+        document.documentElement.style.setProperty('--warm-brown', design.primary_color);
+        /* גם גרסה כהה יותר לאפקט hover — מחשבים אוטומטית */
+        document.documentElement.style.setProperty('--warm-brown-dk', darken(design.primary_color, 15));
+    }
+
+    if (design.text_color) {
+        document.documentElement.style.setProperty('--text-dark', design.text_color);
+    }
+}
+
+/* פונקציית עזר: מכהה צבע HEX בכמות נתונה של אחוזים
+   לדוגמה: darken("#8b6f4e", 15) → גרסה כהה ב-15% */
+function darken(hex, amount) {
+    /* הופכים HEX לערכי RGB */
+    const num = parseInt(hex.replace('#', ''), 16);
+    const r   = Math.max(0, (num >> 16) - Math.round(2.55 * amount));
+    const g   = Math.max(0, ((num >> 8) & 0xff) - Math.round(2.55 * amount));
+    const b   = Math.max(0, (num & 0xff) - Math.round(2.55 * amount));
+    /* חוזרים ל-HEX */
+    return '#' + [r, g, b].map(v => v.toString(16).padStart(2, '0')).join('');
+}
+
 
 /* ----- Hero ----- */
 function applyHero(hero) {

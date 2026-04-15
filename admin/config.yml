@@ -38,6 +38,47 @@ collections:
         fields:
 
           # =====================
+          # עיצוב — גופן, גודל, צבעים
+          # =====================
+          - label: "🎨 עיצוב האתר"
+            name: "design"
+            widget: "object"
+            fields:
+              - label: "גופן (פונט)"
+                name: "font"
+                widget: "select"
+                hint: "הגופן שיופיע בכל האתר"
+                options:
+                  - { label: "Assistant (ברירת מחדל)", value: "Assistant" }
+                  - { label: "Rubik — עגול ומודרני", value: "Rubik" }
+                  - { label: "Heebo — נקי ופשוט", value: "Heebo" }
+                  - { label: "Frank Ruhl Libre — קלאסי ואלגנטי", value: "Frank Ruhl Libre" }
+                  - { label: "Secular One — בולט וחזק", value: "Secular One" }
+
+              - label: "גודל טקסט"
+                name: "text_size"
+                widget: "select"
+                hint: "גודל הטקסט הכללי באתר"
+                options:
+                  - { label: "קטן", value: "small" }
+                  - { label: "רגיל (ברירת מחדל)", value: "medium" }
+                  - { label: "גדול", value: "large" }
+
+              - label: "צבע ראשי (כפתורים, קישורים, הדגשות)"
+                name: "primary_color"
+                widget: "color"
+                hint: "הצבע החום — משפיע על כפתורים, קווים וסטטיסטיקות"
+                default: "#8b6f4e"
+                enableAlpha: false
+
+              - label: "צבע טקסט"
+                name: "text_color"
+                widget: "color"
+                hint: "צבע הטקסט הראשי בכל האתר"
+                default: "#1a1a1a"
+                enableAlpha: false
+
+          # =====================
           # חלק ראשי — Hero
           # =====================
           - label: "🏠 חלק ראשי (עמוד הבית)"
