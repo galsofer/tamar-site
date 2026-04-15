@@ -322,12 +322,12 @@ function applyContact(data) {
 
         /* מזהים לפי האמוג'י איזה שדה זה */
         if (icon.textContent.trim() === '📞' && data.phone) {
-            const textNode = item.querySelector('span:not(.icon)');
-            if (textNode) textNode.textContent = data.phone;
+            const linkNode = item.querySelector('a.contact-link');
+            if (linkNode) { linkNode.textContent = data.phone; linkNode.href = 'tel:' + data.phone; }
         }
         if (icon.textContent.trim() === '✉️' && data.email) {
-            const textNode = item.querySelector('span:not(.icon)');
-            if (textNode) textNode.textContent = data.email;
+            const linkNode = item.querySelector('a.contact-link');
+            if (linkNode) { linkNode.textContent = data.email; linkNode.href = 'mailto:' + data.email; }
         }
     });
 
