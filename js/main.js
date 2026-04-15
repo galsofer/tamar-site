@@ -2,6 +2,30 @@
    main.js — הלוגיקה של האתר
    =================================================== */
 
+/* ---------- תפריט המבורגר למובייל ----------
+
+   כשלוחצים על 3 הקווים (המבורגר):
+   1. מוסיפים קלאס "open" לכפתור — CSS מסובב אותו ל-X
+   2. מוסיפים קלאס "nav-open" לרשימה — CSS מציג אותה כ-dropdown
+   כשלוחצים שוב — מסירים ומחזירים הכל למצב מוסתר.
+   כשלוחצים על קישור — סוגרים את התפריט אוטומטית.
+*/
+const hamburger = document.getElementById('hamburger');
+const navMenu   = document.querySelector('nav ul');
+
+hamburger?.addEventListener('click', () => {
+    hamburger.classList.toggle('open');
+    navMenu.classList.toggle('nav-open');
+});
+
+navMenu?.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+        hamburger.classList.remove('open');
+        navMenu.classList.remove('nav-open');
+    });
+});
+
+
 /* ---------- אנימציית גלילה (Scroll Reveal) ----------
 
    IntersectionObserver הוא כלי JavaScript שמסתכל על
