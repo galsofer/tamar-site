@@ -72,6 +72,18 @@ function setHTML(selector, html) {
     if (el && html !== undefined) el.innerHTML = html;
 }
 
+/* style — מחיל צבע וגודל ישירות על אלמנט
+   קורא לזה אחרי set/setHTML כדי לשכתב את ה-CSS הבסיסי.
+   אם הערך ריק — לא עושים כלום ונשארים עם ברירת המחדל. */
+const sizeMap = { small: '13px', medium: '16px', large: '20px', xlarge: '28px' };
+
+function applyStyle(selector, color, size) {
+    const el = document.querySelector(selector);
+    if (!el) return;
+    if (color) el.style.color = color;
+    if (size && sizeMap[size]) el.style.fontSize = sizeMap[size];
+}
+
 
 /* ===================================================
    פונקציות לכל סקשן
@@ -134,10 +146,13 @@ function darken(hex, amount) {
 /* ----- Hero ----- */
 function applyHero(hero) {
     if (!hero) return;
-    set('.hero-eyebrow',   hero.eyebrow);
-    setHTML('.hero h1',    hero.title);
-    set('.hero-sub',       hero.subtitle);
+    set('.hero-eyebrow',     hero.eyebrow);
+    setHTML('.hero h1',      hero.title);
+    set('.hero-sub',         hero.subtitle);
     set('.hero .cta-button', hero.cta_text);
+    applyStyle('.hero-eyebrow', hero.eyebrow_color, hero.eyebrow_size);
+    applyStyle('.hero h1',      hero.title_color,   hero.title_size);
+    applyStyle('.hero-sub',     hero.subtitle_color, hero.subtitle_size);
 }
 
 
@@ -146,6 +161,8 @@ function applyPainPoints(data) {
     if (!data) return;
     set('#pain-points .section-title', data.title);
     set('#pain-points .section-sub',   data.subtitle);
+    applyStyle('#pain-points .section-title', data.title_color,    data.title_size);
+    applyStyle('#pain-points .section-sub',   data.subtitle_color, data.subtitle_size);
 
     /* בונים את כל הכרטיסים מחדש מהרשימה שב-JSON */
     const grid = document.querySelector('.pain-grid');
@@ -167,12 +184,15 @@ function applyPainPoints(data) {
 function applyAbout(data) {
     if (!data) return;
     set('#about .section-title', data.title);
+    applyStyle('#about .section-title', data.title_color, data.title_size);
 
     /* מעדכנים את 4 הפסקאות */
     const paragraphs = document.querySelectorAll('.about-text p.reveal');
     const texts = [data.p1, data.p2, data.p3, data.p4];
     paragraphs.forEach((p, i) => {
         if (texts[i] !== undefined) p.innerHTML = texts[i];
+        if (data.text_color) p.style.color    = data.text_color;
+        if (data.text_size && sizeMap[data.text_size]) p.style.fontSize = sizeMap[data.text_size];
     });
 
     /* מעדכנים את מספרי הסטטיסטיקה */
@@ -197,6 +217,8 @@ function applyServices(data) {
     if (!data) return;
     set('#services .section-title', data.title);
     set('#services .section-sub',   data.subtitle);
+    applyStyle('#services .section-title', data.title_color,    data.title_size);
+    applyStyle('#services .section-sub',   data.subtitle_color, data.subtitle_size);
 
     const grid = document.querySelector('.services-grid');
     if (grid && data.items) {
@@ -216,15 +238,17 @@ function applySavings(data) {
     if (!data) return;
     set('#savings .section-title', data.title);
     set('#savings .section-sub',   data.subtitle);
+    applyStyle('#savings .section-title', data.title_color,    data.title_size);
+    applyStyle('#savings .section-sub',   data.subtitle_color, data.subtitle_size);
 
     if (!data.items) return;
 
-    /* בונים את כפתורי הטאב */
+    /* בונים את כפתורי הטאב — עם תווית במקום מספר */
     const tabNav = document.querySelector('.savings-tab-nav');
     if (tabNav) {
-        tabNav.innerHTML = data.items.map((_, i) => `
+        tabNav.innerHTML = data.items.map((item, i) => `
             <button class="savings-tab-btn${i === 0 ? ' active' : ''}" data-tab="${i}">
-                ${i + 1}
+                ${item.label || (i + 1)}
             </button>
         `).join('');
     }
@@ -234,8 +258,8 @@ function applySavings(data) {
     if (panelWrap) {
         panelWrap.innerHTML = data.items.map((item, i) => `
             <div class="savings-panel${i === 0 ? ' active' : ''}" data-panel="${i}">
-                <h3>${item.title}</h3>
-                <p>${item.description}</p>
+                <h3 style="${item.title_color ? 'color:' + item.title_color : ''}">${item.title}</h3>
+                <p style="${item.text_color ? 'color:' + item.text_color : ''}${item.text_size && sizeMap[item.text_size] ? ';font-size:' + sizeMap[item.text_size] : ''}">${item.description}</p>
             </div>
         `).join('');
     }
@@ -247,6 +271,8 @@ function applyTestimonials(data) {
     if (!data) return;
     set('#testimonials .section-title', data.title);
     set('#testimonials .section-sub',   data.subtitle);
+    applyStyle('#testimonials .section-title', data.title_color,    data.title_size);
+    applyStyle('#testimonials .section-sub',   data.subtitle_color, data.subtitle_size);
 
     if (!data.items) return;
 
@@ -257,7 +283,7 @@ function applyTestimonials(data) {
             <div class="carousel-slide${i === 0 ? ' active' : ''}">
                 <div class="carousel-card">
                     <span class="carousel-quote-mark">"</span>
-                    <p class="carousel-text">${item.text}</p>
+                    <p class="carousel-text" style="${item.text_color ? 'color:' + item.text_color : ''}${item.text_size && sizeMap[item.text_size] ? ';font-size:' + sizeMap[item.text_size] : ''}">${item.text}</p>
                     <div class="carousel-author">
                         <div class="carousel-avatar">${item.avatar_letter}</div>
                         <div>
@@ -285,6 +311,8 @@ function applyContact(data) {
     if (!data) return;
     set('#contact .section-title', data.title);
     set('#contact .section-sub',   data.subtitle);
+    applyStyle('#contact .section-title', data.title_color,    data.title_size);
+    applyStyle('#contact .section-sub',   data.subtitle_color, data.subtitle_size);
 
     /* מעדכנים את פרטי הקשר */
     const contactItems = document.querySelectorAll('.contact-info-item');

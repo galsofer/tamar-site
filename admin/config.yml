@@ -1,36 +1,20 @@
 # ===================================================
 # config.yml — הגדרות לוח הניהול (Decap CMS)
 # ===================================================
-# קובץ זה מגדיר:
-# 1. מאין לשמור שינויים (GitHub דרך Netlify)
-# 2. אילו שדות יופיעו בממשק העריכה של תמר
 
-# ---------- Backend: חיבור ל-GitHub דרך Netlify ----------
 backend:
   name: git-gateway
-  branch: main       # השם של הענף הראשי ב-GitHub
+  branch: main
 
-# ---------- מיקום תמונות ----------
 media_folder: images
 public_folder: /images
-
-# ---------- שמות לממשק בעברית ----------
 locale: he
-
-# ===================================================
-# COLLECTIONS — האוספים שתמר תוכל לערוך
-# ===================================================
-# אנחנו משתמשים ב-"files" כי יש לנו קובץ אחד (content.json)
-# שמכיל את כל התוכן של האתר.
 
 collections:
   - name: "site"
     label: "✏️ עריכת תוכן האתר"
     files:
 
-      # -----------------------------------------------
-      # הקובץ הראשי — content.json
-      # -----------------------------------------------
       - name: "content"
         label: "כל תוכן האתר"
         file: "content.json"
@@ -38,7 +22,7 @@ collections:
         fields:
 
           # =====================
-          # עיצוב — גופן, גודל, צבעים
+          # עיצוב גלובלי
           # =====================
           - label: "🎨 עיצוב האתר"
             name: "design"
@@ -55,31 +39,29 @@ collections:
                   - { label: "Frank Ruhl Libre — קלאסי ואלגנטי", value: "Frank Ruhl Libre" }
                   - { label: "Secular One — בולט וחזק", value: "Secular One" }
 
-              - label: "גודל טקסט"
+              - label: "גודל טקסט כללי"
                 name: "text_size"
                 widget: "select"
-                hint: "גודל הטקסט הכללי באתר"
+                hint: "גודל הטקסט הכללי בכל האתר"
                 options:
                   - { label: "קטן", value: "small" }
                   - { label: "רגיל (ברירת מחדל)", value: "medium" }
                   - { label: "גדול", value: "large" }
 
-              - label: "צבע ראשי (כפתורים, קישורים, הדגשות)"
+              - label: "צבע ראשי (כפתורים, קישורים)"
                 name: "primary_color"
                 widget: "color"
-                hint: "הצבע החום — משפיע על כפתורים, קווים וסטטיסטיקות"
                 default: "#8b6f4e"
                 enableAlpha: false
 
-              - label: "צבע טקסט"
+              - label: "צבע טקסט כללי"
                 name: "text_color"
                 widget: "color"
-                hint: "צבע הטקסט הראשי בכל האתר"
                 default: "#1a1a1a"
                 enableAlpha: false
 
           # =====================
-          # חלק ראשי — Hero
+          # Hero — חלק ראשי
           # =====================
           - label: "🏠 חלק ראשי (עמוד הבית)"
             name: "hero"
@@ -88,17 +70,58 @@ collections:
               - label: "שורת פתיחה קטנה"
                 name: "eyebrow"
                 widget: "string"
-                hint: "השורה הקטנה שמופיעה מעל הכותרת הגדולה"
+                hint: "השורה הקטנה מעל הכותרת"
+              - label: "צבע שורת פתיחה"
+                name: "eyebrow_color"
+                widget: "color"
+                default: "#8b6f4e"
+                required: false
+                enableAlpha: false
+              - label: "גודל שורת פתיחה"
+                name: "eyebrow_size"
+                widget: "select"
+                required: false
+                options:
+                  - { label: "קטן", value: "small" }
+                  - { label: "רגיל", value: "medium" }
+                  - { label: "גדול", value: "large" }
 
               - label: "כותרת ראשית"
                 name: "title"
                 widget: "string"
                 hint: "אפשר להשתמש ב-<br> למעבר שורה"
+              - label: "צבע כותרת ראשית"
+                name: "title_color"
+                widget: "color"
+                default: "#1a1a1a"
+                required: false
+                enableAlpha: false
+              - label: "גודל כותרת ראשית"
+                name: "title_size"
+                widget: "select"
+                required: false
+                options:
+                  - { label: "בינוני", value: "medium" }
+                  - { label: "גדול", value: "large" }
+                  - { label: "גדול מאוד", value: "xlarge" }
 
               - label: "פסקת תיאור"
                 name: "subtitle"
                 widget: "text"
-                hint: "הטקסט שמופיע מתחת לכותרת הגדולה"
+              - label: "צבע פסקת תיאור"
+                name: "subtitle_color"
+                widget: "color"
+                default: "#444444"
+                required: false
+                enableAlpha: false
+              - label: "גודל פסקת תיאור"
+                name: "subtitle_size"
+                widget: "select"
+                required: false
+                options:
+                  - { label: "קטן", value: "small" }
+                  - { label: "רגיל", value: "medium" }
+                  - { label: "גדול", value: "large" }
 
               - label: "טקסט הכפתור"
                 name: "cta_text"
@@ -114,10 +137,38 @@ collections:
               - label: "כותרת הסקשן"
                 name: "title"
                 widget: "string"
+              - label: "צבע כותרת"
+                name: "title_color"
+                widget: "color"
+                default: "#ffffff"
+                required: false
+                enableAlpha: false
+              - label: "גודל כותרת"
+                name: "title_size"
+                widget: "select"
+                required: false
+                options:
+                  - { label: "בינוני", value: "medium" }
+                  - { label: "גדול", value: "large" }
+                  - { label: "גדול מאוד", value: "xlarge" }
 
               - label: "תת-כותרת"
                 name: "subtitle"
                 widget: "text"
+              - label: "צבע תת-כותרת"
+                name: "subtitle_color"
+                widget: "color"
+                default: "#aaaaaa"
+                required: false
+                enableAlpha: false
+              - label: "גודל תת-כותרת"
+                name: "subtitle_size"
+                widget: "select"
+                required: false
+                options:
+                  - { label: "קטן", value: "small" }
+                  - { label: "רגיל", value: "medium" }
+                  - { label: "גדול", value: "large" }
 
               - label: "כרטיסי סיבות"
                 name: "items"
@@ -127,12 +178,9 @@ collections:
                   - label: "אייקון (אמוג'י)"
                     name: "icon"
                     widget: "string"
-                    hint: "לדוגמה: 🕐 או 🚗"
-
                   - label: "כותרת"
                     name: "title"
                     widget: "string"
-
                   - label: "תיאור קצר"
                     name: "description"
                     widget: "text"
@@ -147,23 +195,49 @@ collections:
               - label: "כותרת הסקשן"
                 name: "title"
                 widget: "string"
+              - label: "צבע כותרת"
+                name: "title_color"
+                widget: "color"
+                default: "#1a1a1a"
+                required: false
+                enableAlpha: false
+              - label: "גודל כותרת"
+                name: "title_size"
+                widget: "select"
+                required: false
+                options:
+                  - { label: "בינוני", value: "medium" }
+                  - { label: "גדול", value: "large" }
+                  - { label: "גדול מאוד", value: "xlarge" }
 
               - label: "פסקה ראשונה"
                 name: "p1"
                 widget: "text"
                 hint: "אפשר להשתמש ב-<strong>טקסט</strong> להדגשה"
-
               - label: "פסקה שנייה"
                 name: "p2"
                 widget: "text"
-
               - label: "פסקה שלישית"
                 name: "p3"
                 widget: "text"
-
               - label: "פסקה רביעית"
                 name: "p4"
                 widget: "text"
+
+              - label: "צבע טקסט הפסקאות"
+                name: "text_color"
+                widget: "color"
+                default: "#444444"
+                required: false
+                enableAlpha: false
+              - label: "גודל טקסט הפסקאות"
+                name: "text_size"
+                widget: "select"
+                required: false
+                options:
+                  - { label: "קטן", value: "small" }
+                  - { label: "רגיל", value: "medium" }
+                  - { label: "גדול", value: "large" }
 
               - label: "מספרים (סטטיסטיקות)"
                 name: "stats"
@@ -173,12 +247,10 @@ collections:
                     name: "experience_years"
                     widget: "number"
                     value_type: "int"
-
                   - label: "שנים כעצמאית"
                     name: "independent_years"
                     widget: "number"
                     value_type: "int"
-
                   - label: "מחויבות (%)"
                     name: "commitment"
                     widget: "number"
@@ -194,10 +266,38 @@ collections:
               - label: "כותרת הסקשן"
                 name: "title"
                 widget: "string"
+              - label: "צבע כותרת"
+                name: "title_color"
+                widget: "color"
+                default: "#1a1a1a"
+                required: false
+                enableAlpha: false
+              - label: "גודל כותרת"
+                name: "title_size"
+                widget: "select"
+                required: false
+                options:
+                  - { label: "בינוני", value: "medium" }
+                  - { label: "גדול", value: "large" }
+                  - { label: "גדול מאוד", value: "xlarge" }
 
               - label: "תת-כותרת"
                 name: "subtitle"
                 widget: "text"
+              - label: "צבע תת-כותרת"
+                name: "subtitle_color"
+                widget: "color"
+                default: "#888888"
+                required: false
+                enableAlpha: false
+              - label: "גודל תת-כותרת"
+                name: "subtitle_size"
+                widget: "select"
+                required: false
+                options:
+                  - { label: "קטן", value: "small" }
+                  - { label: "רגיל", value: "medium" }
+                  - { label: "גדול", value: "large" }
 
               - label: "כרטיסי שירות"
                 name: "items"
@@ -207,11 +307,9 @@ collections:
                   - label: "אייקון (אמוג'י)"
                     name: "icon"
                     widget: "string"
-
                   - label: "שם השירות"
                     name: "title"
                     widget: "string"
-
                   - label: "תיאור השירות"
                     name: "description"
                     widget: "text"
@@ -226,23 +324,74 @@ collections:
               - label: "כותרת הסקשן"
                 name: "title"
                 widget: "string"
+              - label: "צבע כותרת"
+                name: "title_color"
+                widget: "color"
+                default: "#1a1a1a"
+                required: false
+                enableAlpha: false
+              - label: "גודל כותרת"
+                name: "title_size"
+                widget: "select"
+                required: false
+                options:
+                  - { label: "בינוני", value: "medium" }
+                  - { label: "גדול", value: "large" }
+                  - { label: "גדול מאוד", value: "xlarge" }
 
               - label: "תת-כותרת"
                 name: "subtitle"
                 widget: "text"
+              - label: "צבע תת-כותרת"
+                name: "subtitle_color"
+                widget: "color"
+                default: "#888888"
+                required: false
+                enableAlpha: false
+              - label: "גודל תת-כותרת"
+                name: "subtitle_size"
+                widget: "select"
+                required: false
+                options:
+                  - { label: "קטן", value: "small" }
+                  - { label: "רגיל", value: "medium" }
+                  - { label: "גדול", value: "large" }
 
               - label: "פנלים (טאבים)"
                 name: "items"
                 widget: "list"
                 label_singular: "פנל"
                 fields:
+                  - label: "תווית הכפתור"
+                    name: "label"
+                    widget: "string"
+                    hint: "הטקסט שמופיע על כפתור הטאב — קצר (2-3 מילים)"
                   - label: "כותרת הפנל"
                     name: "title"
                     widget: "string"
-
+                  - label: "צבע כותרת הפנל"
+                    name: "title_color"
+                    widget: "color"
+                    default: "#1a1a1a"
+                    required: false
+                    enableAlpha: false
                   - label: "תיאור"
                     name: "description"
                     widget: "text"
+                  - label: "צבע טקסט"
+                    name: "text_color"
+                    widget: "color"
+                    default: "#444444"
+                    required: false
+                    enableAlpha: false
+                  - label: "גודל טקסט"
+                    name: "text_size"
+                    widget: "select"
+                    required: false
+                    options:
+                      - { label: "קטן", value: "small" }
+                      - { label: "רגיל", value: "medium" }
+                      - { label: "גדול", value: "large" }
 
           # =====================
           # המלצות
@@ -254,10 +403,30 @@ collections:
               - label: "כותרת הסקשן"
                 name: "title"
                 widget: "string"
+              - label: "צבע כותרת"
+                name: "title_color"
+                widget: "color"
+                default: "#1a1a1a"
+                required: false
+                enableAlpha: false
+              - label: "גודל כותרת"
+                name: "title_size"
+                widget: "select"
+                required: false
+                options:
+                  - { label: "בינוני", value: "medium" }
+                  - { label: "גדול", value: "large" }
+                  - { label: "גדול מאוד", value: "xlarge" }
 
               - label: "תת-כותרת"
                 name: "subtitle"
                 widget: "text"
+              - label: "צבע תת-כותרת"
+                name: "subtitle_color"
+                widget: "color"
+                default: "#888888"
+                required: false
+                enableAlpha: false
 
               - label: "המלצות"
                 name: "items"
@@ -267,15 +436,26 @@ collections:
                   - label: "טקסט ההמלצה"
                     name: "text"
                     widget: "text"
-
+                  - label: "צבע טקסט ההמלצה"
+                    name: "text_color"
+                    widget: "color"
+                    default: "#444444"
+                    required: false
+                    enableAlpha: false
+                  - label: "גודל טקסט ההמלצה"
+                    name: "text_size"
+                    widget: "select"
+                    required: false
+                    options:
+                      - { label: "קטן", value: "small" }
+                      - { label: "רגיל", value: "medium" }
+                      - { label: "גדול", value: "large" }
                   - label: "שם הממליץ"
                     name: "author_name"
                     widget: "string"
-
                   - label: "תפקיד / עסק"
                     name: "author_role"
                     widget: "string"
-
                   - label: "אות ראשונה לאווטאר"
                     name: "avatar_letter"
                     widget: "string"
@@ -291,10 +471,38 @@ collections:
               - label: "כותרת"
                 name: "title"
                 widget: "string"
+              - label: "צבע כותרת"
+                name: "title_color"
+                widget: "color"
+                default: "#ffffff"
+                required: false
+                enableAlpha: false
+              - label: "גודל כותרת"
+                name: "title_size"
+                widget: "select"
+                required: false
+                options:
+                  - { label: "בינוני", value: "medium" }
+                  - { label: "גדול", value: "large" }
+                  - { label: "גדול מאוד", value: "xlarge" }
 
               - label: "תת-כותרת"
                 name: "subtitle"
                 widget: "text"
+              - label: "צבע תת-כותרת"
+                name: "subtitle_color"
+                widget: "color"
+                default: "#aaaaaa"
+                required: false
+                enableAlpha: false
+              - label: "גודל תת-כותרת"
+                name: "subtitle_size"
+                widget: "select"
+                required: false
+                options:
+                  - { label: "קטן", value: "small" }
+                  - { label: "רגיל", value: "medium" }
+                  - { label: "גדול", value: "large" }
 
               - label: "מספר טלפון"
                 name: "phone"
